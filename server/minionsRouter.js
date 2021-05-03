@@ -35,15 +35,19 @@ minionsRouter.get('/:minionId', (req, res, next) => {
     
     res.status(200).send(req.minion);
 });
-// post new minion
-minionsRouter.post('/', (req, res, next) => {
-    
-});
 
 // update minion by Id
 minionsRouter.put('/:minionId', (req, res, next) => {
 
+
 });
+
+// post new minion
+minionsRouter.post('/', (req, res, next) => {
+    const newMinion = addToDatabase('minions', req.body);
+    res.status(201).send(newMinion);
+});
+
 // delete minion by Id
 minionsRouter.delete('/:minionId', (req, res, next) => {
 
