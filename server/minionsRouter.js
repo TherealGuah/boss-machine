@@ -12,7 +12,17 @@ const {
 } = require('./db');
 
 /*      '/api/minions'      */
-minionsRouter.param('/:minionsId', (req, res, next, id) => {});
+minionsRouter.param('minionId', (req, res, next, id) => {
+
+    const minion = getFromDatabaseById('minions', id);
+        
+    if (!minion) {
+        res.status(404).send();
+    } else {
+        req.minion = minion;
+        next();
+    }    
+});
 
 
 // get all minions
@@ -20,14 +30,16 @@ minionsRouter.get('/', (req, res, next) => {
     const allMinions = getAllFromDatabase('minions');
     res.status(200).send(allMinions);
 });
-// post new minion
-minionsRouter.post('/', (req, res, next) => {
-
-});
 // get single minion by Id
 minionsRouter.get('/:minionId', (req, res, next) => {
-
+    
+    res.status(200).send(req.minion);
 });
+// post new minion
+minionsRouter.post('/', (req, res, next) => {
+    
+});
+
 // update minion by Id
 minionsRouter.put('/:minionId', (req, res, next) => {
 
