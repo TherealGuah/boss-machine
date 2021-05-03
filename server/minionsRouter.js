@@ -24,8 +24,6 @@ minionsRouter.param('minionId', (req, res, next, id) => {
         next();
     }    
 });
-
-
 // get all minions
 minionsRouter.get('/', (req, res, next) => {
     const allMinions = getAllFromDatabase('minions');
@@ -33,7 +31,6 @@ minionsRouter.get('/', (req, res, next) => {
 });
 // get single minion by Id
 minionsRouter.get('/:minionId', (req, res, next) => {
-    
     res.status(200).send(req.minion);
 });
 
@@ -51,6 +48,7 @@ minionsRouter.post('/', (req, res, next) => {
 
 // delete minion by Id
 minionsRouter.delete('/:minionId', (req, res, next) => {
+    
     const deleted = deleteFromDatabasebyId('minions', req.id);
     if (!deleted) {
         res.status(500);
