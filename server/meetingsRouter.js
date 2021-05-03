@@ -15,7 +15,8 @@ const {
 
 // get all meetings
 meetingsRouter.get('/', (req, res, next) => {
-
+    const allMeetings = getAllFromDatabase('meetings');
+    res.status(200).send(allMeetings);
 });
 // create new meeting
 meetingsRouter.post('/', (req, res, next) => {
