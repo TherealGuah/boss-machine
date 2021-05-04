@@ -1,5 +1,5 @@
 const express = require('express');
-const worksRouter = express.Router();
+const workRouter = express.Router();
 
 const {
     createMeeting,
@@ -12,23 +12,50 @@ const {
 } = require('./db');
 
 /* '/api/minions/:minionId/work */
+workRouter.param('minionId', (req, res, next, id) => {
 
-worksRouter.get('/:minionId/work', (req, res, next) => {
+    const minion = getFromDatabaseById('minions', id);
+        
+    if (!minion) {
+        res.status(404).send();
+    } else {
+        req.minion = minion;
+        req.minionId = id;
+        next();
+    }    
+});
+
+workRouter.param('workId', (req, res, next, id) => {
+
+    const work = getFromDatabaseById('work', id);
+        
+    if (!work) {
+        res.status(404).send();
+    } else {
+        req.work = work;
+        req.workId = id;
+        next();
+    }    
+});
+
+
+workRouter.get('/:minionId/work', (req, res, next) => {
     const allWorks = getAllFromDatabase('work');
     res.status(200).send(allWorks);
 });
 
-worksRouter.put('/:minionId/work/:workId', (req, res, next) => {
-
+workRouter.put('/:minionId/work/:workId', (req, res, next) => {
+    const updatedWork = updateInstanceInDatabase('work', req.body);
+    res.status(200).send(updatedWork);
 });
 
-worksRouter.post('/:minionId/work', (req, res, next) => {
+workRouter.post('/:minionId/work', (req, res, next) => {
     const newWork = addToDatabase('work', req.body);
     res.status(201).send(newWork);
 });
 
-worksRouter.delete('/:minionId/work/:workId', (req, res, next) => {
+workRouter.delete('/:minionId/work/:workId', (req, res, next) => {
 
 });
 
-module.exports = worksRouter;
+module.exports = workRouter;
