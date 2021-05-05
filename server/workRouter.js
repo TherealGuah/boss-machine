@@ -41,7 +41,8 @@ workRouter.param('workId', (req, res, next, id) => {
 
 workRouter.get('/:minionId/work', (req, res, next) => {
     const allWorks = getAllFromDatabase('work');
-    res.status(200).send(allWorks);
+    const filteredWork = allWorks.filter( work =>  work.minonId === req.minionId);
+    res.status(200).send(filteredWork);
 });
 
 workRouter.put('/:minionId/work/:workId', (req, res, next) => {
