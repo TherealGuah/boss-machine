@@ -1,53 +1,61 @@
 const express = require('express');
 const workRouter = express.Router();
 
-const {
-    createMeeting,
-    getAllFromDatabase,
+const { getAllFromDatabase,
     getFromDatabaseById,
     addToDatabase,
     updateInstanceInDatabase,
     deleteFromDatabasebyId,
-    deleteAllFromDatabase
+    updateWorkById,
 } = require('./db');
 
 /* '/api/minions/:minionId/work */
-workRouter.param('minionId', (req, res, next, id) => {
+workRouter.param('minionId', (req, res, next, minionId) => {
 
-    const minion = getFromDatabaseById('minions', id);
+    const minion = getFromDatabaseById('minions', minionId);
         
     if (!minion) {
         res.status(404).send();
     } else {
         req.minion = minion;
-        req.minionId = id;
+        req.minionId = minionId;
         next();
     }    
 });
 
-workRouter.param('workId', (req, res, next, id) => {
+workRouter.param('workId', (req, res, next, workId) => {
 
-    const work = getFromDatabaseById('work', id);
+    const work = getFromDatabaseById('work', workId);
         
     if (!work) {
         res.status(404).send();
     } else {
         req.work = work;
-        req.workId = id;
+        req.workId = workId;
         next();
     }    
 });
 
 
 workRouter.get('/:minionId/work', (req, res, next) => {
-    const allWorks = getAllFromDatabase('work');
-    const filteredWork = allWorks.filter( work =>  work.minonId === req.minionId);
-    res.status(200).send(filteredWork);
+        
+        const allWorks = getAllFromDatabase('work');
+       
+        const filteredWork = allWorks.filter( work =>  work.minionId === req.minionId);
+        
+        res.status(200).send(filteredWork);
 });
 
 workRouter.put('/:minionId/work/:workId', (req, res, next) => {
-    const updatedWork = updateInstanceInDatabase('work', req.body);
-    res.status(200).send(updatedWork);
+    
+    
+    if (req.workId !== req.minionId) {
+        res.status(400).send();   
+    } else {
+        const updatedWork = updateInstanceInDatabase('work', req.body);
+        res.status(200).send(updatedWork);
+    }  
+    
 });
 
 workRouter.post('/:minionId/work', (req, res, next) => {
@@ -56,7 +64,12 @@ workRouter.post('/:minionId/work', (req, res, next) => {
 });
 
 workRouter.delete('/:minionId/work/:workId', (req, res, next) => {
-
+    const work = deleteFromDatabasebyId('work', req.workId);
+    if (!work) {
+        res.status(500).send();
+    } else {
+        res.status(204).send(work);
+    }  
 });
 
 module.exports = workRouter;
