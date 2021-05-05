@@ -5,8 +5,7 @@ const { getAllFromDatabase,
     getFromDatabaseById,
     addToDatabase,
     updateInstanceInDatabase,
-    deleteFromDatabasebyId,
-    updateWorkById,
+    deleteFromDatabasebyId
 } = require('./db');
 
 /* '/api/minions/:minionId/work */

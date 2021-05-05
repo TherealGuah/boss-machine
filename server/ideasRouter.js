@@ -2,13 +2,11 @@ const express = require('express');
 const ideasRouter = express.Router();
 const checkMillionDollarIdea = require('./checkMillionDollarIdea');
 const {
-    createMeeting,
     getAllFromDatabase,
     getFromDatabaseById,
     addToDatabase,
     updateInstanceInDatabase,
-    deleteFromDatabasebyId,
-    deleteAllFromDatabase
+    deleteFromDatabasebyId
 } = require('./db');
 
 /*      '/api/ideas'        */
